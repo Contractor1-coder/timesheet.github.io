@@ -7,12 +7,23 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('loginForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const userId = document.getElementById('userId').value;
-        if (userId === '1') {
-            loginScreen.style.display = 'none';
-            timesheetManagement.style.display = 'block';
-        } else {
-            alert('Invalid ID. Please use ID 1 to log in.');
-        }
+        fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userId }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                loginScreen.style.display = 'none';
+                timesheetManagement.style.display = 'block';
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
     });
 
     document.getElementById('createTimesheetBtn').addEventListener('click', function() {
@@ -21,6 +32,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.getElementById('viewTimesheetsBtn').addEventListener('click', function() {
+        fetch('/timesheets')
+        .then(response => response.json())
+        .then(timesheets => {
+            const timesheetList = timesheets.map(ts => `Week: ${ts.week}`).join('\n');
+            alert(timesheetList || 'No timesheets available');
+        })
+        .catch(error => console.error('Error:', error));
         timesheetManagement.style.display = 'none';
         timesheetView.style.display = 'block';
     });
@@ -28,8 +46,22 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('timesheetForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const selectedWeek = document.getElementById('weekPicker').value;
-        alert(`Timesheet created for week: ${selectedWeek}`);
-        // Here you would typically send this data to a server
+        fetch('/timesheet', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ week: selectedWeek }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert(`Timesheet created for week: ${data.timesheet.week}`);
+            } else {
+                alert('Failed to create timesheet');
+            }
+        })
+        .catch(error => console.error('Error:', error));
     });
 
     document.getElementById('backToManagement').addEventListener('click', function() {
