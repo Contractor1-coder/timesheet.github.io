@@ -37,7 +37,7 @@
         button:hover {
             background-color: #0056b3;
         }
-        #timesheetCreation {
+        #timesheetManagement, #timesheetView {
             display: none;
         }
     </style>
@@ -52,25 +52,53 @@
             </form>
         </div>
 
+        <div id="timesheetManagement">
+            <h2>Timesheet Management</h2>
+            <button id="createTimesheetBtn">Create Timesheet</button>
+            <button id="viewTimesheetsBtn">View Timesheets</button>
+        </div>
+
         <div id="timesheetCreation">
             <h2>Create Weekly Timesheet</h2>
             <form id="timesheetForm">
                 <input type="week" id="weekPicker" required>
                 <button type="submit">Create Timesheet</button>
             </form>
+            <button id="backToManagement">Back</button>
+        </div>
+
+        <div id="timesheetView">
+            <h2>View Timesheets</h2>
+            <p>No timesheets available yet.</p>
+            <button id="backToManagementFromView">Back</button>
         </div>
     </div>
 
     <script>
+        const loginScreen = document.getElementById('loginScreen');
+        const timesheetManagement = document.getElementById('timesheetManagement');
+        const timesheetCreation = document.getElementById('timesheetCreation');
+        const timesheetView = document.getElementById('timesheetView');
+
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const userId = document.getElementById('userId').value;
             if (userId === '1') {
-                document.getElementById('loginScreen').style.display = 'none';
-                document.getElementById('timesheetCreation').style.display = 'block';
+                loginScreen.style.display = 'none';
+                timesheetManagement.style.display = 'block';
             } else {
                 alert('Invalid ID. Please use ID 1 to log in.');
             }
+        });
+
+        document.getElementById('createTimesheetBtn').addEventListener('click', function() {
+            timesheetManagement.style.display = 'none';
+            timesheetCreation.style.display = 'block';
+        });
+
+        document.getElementById('viewTimesheetsBtn').addEventListener('click', function() {
+            timesheetManagement.style.display = 'none';
+            timesheetView.style.display = 'block';
         });
 
         document.getElementById('timesheetForm').addEventListener('submit', function(e) {
@@ -78,6 +106,16 @@
             const selectedWeek = document.getElementById('weekPicker').value;
             alert(`Timesheet created for week: ${selectedWeek}`);
             // Here you would typically send this data to a server
+        });
+
+        document.getElementById('backToManagement').addEventListener('click', function() {
+            timesheetCreation.style.display = 'none';
+            timesheetManagement.style.display = 'block';
+        });
+
+        document.getElementById('backToManagementFromView').addEventListener('click', function() {
+            timesheetView.style.display = 'none';
+            timesheetManagement.style.display = 'block';
         });
     </script>
 </body>
