@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Timesheet Login</title>
+    <title>Timesheet App</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -14,7 +14,7 @@
             margin: 0;
             background-color: #f0f0f0;
         }
-        .login-container {
+        .container {
             background-color: white;
             padding: 2rem;
             border-radius: 8px;
@@ -37,24 +37,47 @@
         button:hover {
             background-color: #0056b3;
         }
+        #timesheetCreation {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Timesheet Login</h2>
-        <form id="loginForm">
-            <input type="text" id="userId" placeholder="Enter your ID" required>
-            <button type="submit">Login</button>
-        </form>
+    <div class="container">
+        <div id="loginScreen">
+            <h2>Timesheet Login</h2>
+            <form id="loginForm">
+                <input type="text" id="userId" placeholder="Enter your ID" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+
+        <div id="timesheetCreation">
+            <h2>Create Weekly Timesheet</h2>
+            <form id="timesheetForm">
+                <input type="week" id="weekPicker" required>
+                <button type="submit">Create Timesheet</button>
+            </form>
+        </div>
     </div>
 
     <script>
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
             const userId = document.getElementById('userId').value;
-            // Here you would typically send the ID to a server for verification
-            console.log('Login attempt with ID:', userId);
-            // For now, we'll just log the ID. In a real app, you'd handle login logic here.
+            if (userId === '1') {
+                document.getElementById('loginScreen').style.display = 'none';
+                document.getElementById('timesheetCreation').style.display = 'block';
+            } else {
+                alert('Invalid ID. Please use ID 1 to log in.');
+            }
+        });
+
+        document.getElementById('timesheetForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const selectedWeek = document.getElementById('weekPicker').value;
+            alert(`Timesheet created for week: ${selectedWeek}`);
+            // Here you would typically send this data to a server
         });
     </script>
 </body>
